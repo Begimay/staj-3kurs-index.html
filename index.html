@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Стаж</title>
+    <link rel="stylesheet" href="style/w3.css">    
+</head>
+<body>
+    <div class="w3-container">
+            <p>
+               <input type="submit" value="Взять данные из API" id="getJSON" class="w3-btn w3-blue">
+            </p>
+            <div id="result" class="w3-container"></div>
+    </div>
+    <script>
+        document.getElementById('getJSON').addEventListener('click', getJSON);
+        document.getElementById('postData').addEventListener('submit', postData);
+
+        function getJSON(){
+
+            fetch('http://toktogul.com.kg/api/blog')
+            .then((res) => { return res.json() })
+            .then((data) => { 
+                let result = '<h2> News Info </h2>';
+                data.forEach((news) => {
+                    result +=
+                     `<h4> Text: ${news.text} </h4>
+                     <ul class="w3-ul">
+                       <li> Phone : ${news.phone}</li>
+                       <li> Created : ${news.created} </li>
+                       <li> Image : ${news.photo_url} </li>
+                    </ul>
+                     `;
+                document.getElementById('result').innerHTML = result;
+                });
+            
+           })
+           
+          
+        }
+
+        function postData(event){
+            event.preventDefault();
+            
+            let tittle = document.getElementById('tittle').value;
+            let body = document.getElementById('body').value;
+
+            fetch('http://toktogul.com.kg/api/blog', {
+                method: 'POST',
+                headers : new Headers(),
+                body:JSON.stringify({tittle:tittle, body:body})
+            }).then((res) => res.json())
+            .then((data) =>  alert('Data Sent'))
+            .catch((err)=>console.log(err))
+
+        }
+
+
+
+
+
+    </script>
+    
+</body>
+</html>
